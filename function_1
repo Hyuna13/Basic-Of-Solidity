@@ -1,0 +1,58 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+pragma solidity >= 0.7.0 < 0.9.0;
+
+contract lec5{
+
+    /* view: function밖의 변수 읽을 수 있으나  변경 불가능
+       pure: function밖의 변수 읽을 수 없고 변경 불가능
+       view와 pure 명시안할때: function밖의 변수를 읽고 변경해야함
+    */
+    
+    //1.view
+    uint256 public a = 1;
+    function read_a() public view returns(uint256) {
+        return a + 2;
+    }
+
+    //2.pure
+    function read_a2() public pure returns(uint256) {
+        uint256 b = 1;
+        return 4+5+b;
+    }
+
+    //3.둘다 X
+    function read_a3() public returns(uint256) {
+        a = 13;
+        return a;
+    }
+}
+
+    //function 이름 () public { (public, extercnal, private, internal) }변경가능
+    /* public: 모든곳에서 접근가능
+       external: 모든곳에서 접근가능하나 external이 정의된 자기자신의 컨트랙내에서 접근불가
+       private: 자기컨트랙에서만가능 상속받은자식도 불가능
+       internal: 자기컨트랙에서만 가능하고 상속받은 자식은 가능
+    */
+
+contract Public_example{
+    uint256 public a = 3;
+
+    function changeA1(uint256 _value) public {
+        a = _value;
+    }
+    function get_a() view public returns (uint256) {
+        return a;
+    }
+}
+
+contract Public_example_2{
+
+    Public_example instance = new Public_example();
+
+    function changeA2(uint256 _value) public{
+        instance.changeA1(_value);
+    }
+    function use_public_example_a() view public returns (uint256) {
+        return instance.get_a();
+    }
+}
