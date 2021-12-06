@@ -69,3 +69,27 @@ contract Daughter is Father, Mother{
         return fatherMoney+motherMoney;
     }
 }
+
+
+//super
+//상속 순서 = 맨 오른쪽이 최신
+
+contract Father {
+    event FatherName(string name);
+    function who() public virtual {
+        emit FatherName("Jake Swift");
+    }
+}
+
+contract Mother {
+    event MotherName(string name);
+    function who() public virtual {
+        emit MotherName("Alex Gomez");
+    }
+}
+
+contract Daughter is Father, Mother {
+    function who() public override(Father, Mother){
+        super.who();
+    }
+}
