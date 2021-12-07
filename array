@@ -1,0 +1,38 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+pragma solidity >= 0.7.0 < 0.9.0;
+
+//array (mapping을 더 선호함)
+//mapping과 array는 값을 새로받으면 업데이트를 따로해야함
+contract lec14{
+    uint256[] public ageArray; 
+    uint256[10] public ageFixedSizedArray; //사이즈 제한
+    string[] public nameArray=["ray","alex","jessi"]//미리 값을 추가
+
+    function AgeLength() public view returns(uint256) {
+        return ageArray.length;
+    }
+
+    function AgePush(uint256 _age) public {
+        ageArray.push(_age); //array추가 0부터
+    }
+
+    function AgeGet(uint256 _index) public view returns(uint256){
+        return ageArray[_index];
+    }
+
+    function AgePop() public {
+        ageArray.pop(); //최신의것 삭제 length변함
+    }
+    
+    function AgeDelete(uint256 _index) public {
+        delete ageArray[_index]; //원하는것 삭제가능 -0으로치환 length는 안변함.
+    }
+    
+    function AgeChange(uint256 _index, uint256 _age) public {
+        ageArray[_index] = _age; //0으로 치환된부분 채워넣기
+    }
+
+    function AgeUpdate() public {
+        ageArray[_index] = _age;
+    }
+}
