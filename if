@@ -1,0 +1,34 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+pragma solidity >= 0.7.0 < 0.9.0;
+
+//if조건문
+contract lec16{
+    //1. if - else
+    string private outcome = "";
+    function isIt5(uint256 _number) public returns(string memory) {
+        if(_number == 5){
+            outcome = "Yes, It's 5";
+            return outcome;
+        }
+        else{
+            outcome = "No, It's not 5";
+            return outcome;
+        }
+    }
+    //2. if - else if - else
+    function is5or3or1(uint256 _number) public returns(string memory) {
+        if(_number == 5){
+            outcome = "Yes, It's 5";
+            return outcome;
+        }else if(_number == 3){
+            outcome = "Yes, It's 3";
+            return outcome;
+        }else if(_number == 1){
+            outcome = "Yes, It's 1";
+            return outcome;
+        }else{
+            outcome = "No, It's not 5, 3 or 1";
+            return outcome;
+        }
+    }
+}
