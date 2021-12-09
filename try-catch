@@ -1,0 +1,90 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+pragma solidity >= 0.7.0 < 0.9.0;
+
+//error handler: require, revert, assert, try/catch
+
+//try/catch 에러가나도 프로그램이 종료되지않고 대처할수있게함. 
+//try/catch문 안에서 에러가난다면 catch는 에러 잡지못함, 밖에서 에러가 난다면 잡을수있음
+/*1.catch Error: revert, require을 통한 에러. 
+  2.catch Panic: assert를 통한 에러. 0.8.1~
+  3.catch(bytesmemoryLowLevelData){} 로우레벨에러잡음*/
+//외부 스마트컨트랙트를 부르거나 생성할때, 스마트 컨트랙트내에서 함수를 부를때
+
+//외부 스마트컨트랙트를 부를때
+contract Math{
+    function division(uint256 _num1, uint256 _num2) public pure returns(uint256) {
+        require(_num1<10, "num should not be more than 10");
+        return _num1/_num2;
+    }
+}
+
+contract runner{
+    event catchErr(string _name, string _err);
+    event catchPanic(string _name, uint256 _err);
+    event catchLowLevelErr(string _name, bytes _err);
+
+    Math public mathInstance = new Math();
+
+    function playTryCatch(uint256 _num1, uint256 _num2) public returns(uint256, bool){
+
+        try mathInstance.division(_num1, _num2) returns(uint256 value) {
+            return(value, true);
+        } catch Error(string memory _err) {
+
+            emit catchErr("revert/require", _err);
+            return(0, false);
+        } catch Panic(uint256 _errorCode) {
+
+            emit catchPanic("assertError/Panic", _errorCode);
+            return(0, false);
+        } catch (bytes memory _errorCode) {
+
+            emit catchLowLevelErr("LowLevelError", _errorCode);
+            return(0, false);
+        }
+    }
+}
+
+
+//외부스마트 컨트랙트 생성할때
+contract character{
+
+    string private name;
+    uint256 private power;
+
+    constructor(string memory _name, uint256 _power){
+        name = _name;
+        power = _power;
+    }
+}
+
+contract runner2{
+    event catchOnly(string _name, string _err);
+
+    function playTryCatch2(string memory _name, uint256 _power) public returns(bool){
+        try new character(_name, _power){
+            return(true);
+        } catch{
+            emit catchOnly("catch", "Error!");
+            return(false);
+        }
+    }
+}
+
+//스마트 컨트랙트 내에서 함수를 부를때
+contract runner3{
+    event catchOnly(string _name, string _err);
+
+    function simple() public pure returns(uint256){
+        return 4;
+    }
+
+    function playTryCatch3() public returns(uint256, bool) {
+        try this.simple() returns(uint256 _value){
+            return(_value, true);
+        } catch{
+            emit catchOnly("catch", "Error!");
+            return(0, false);
+        }
+    }
+}
