@@ -1,0 +1,34 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+pragma solidity >= 0.7.0 < 0.9.0;
+
+//modifier: 여러함수 한번에 저장
+contract lec23{
+    
+    modifier onlyAdults{
+        revert("You are not allowed");
+        _;
+    }
+
+    function BuyAlchol() public onlyAdults returns(string memory) {
+        return "Your payment is succeeded";
+    }
+
+    modifier onlyAdults2(uint256 _age){
+        require(_age>18, "You are not allowed");
+        _;
+    }
+    
+    function BuyingAlchol2(uint256 _age) public onlyAdults2(_age) returns(string memory){
+        return "Your payment is succeeded";
+    } 
+
+
+    uint256 public num = 5;
+    modifier numChange{
+        num = 10;
+        _;
+    }
+    function numChangeFunction() public numChange{
+        num = 15;
+    }
+}
