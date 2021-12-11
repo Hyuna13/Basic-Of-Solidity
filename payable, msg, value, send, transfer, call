@@ -1,0 +1,37 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+pragma solidity >= 0.5.0 < 0.9.0;
+
+//payable, msg, value 와 이더보내는 함수
+/*
+  payable: 이더,토큰 상호작용시 필요한 키워드, send,call, transfer을 사용하여 이더를 보낼때 필요. 함수,주소,생성자에붙어서 사용
+  msg.value: 송금된 코인값
+  이더보내는 3가지함수
+  1. send: 2300gas소비, 성공여부 trur or false로 나타냄
+  2. transfer: 2300gas소비, 실패여부 에러 발생
+  3. call: gas소비 가변적, 성공여부 true or false로 나타냄, 재진입 공격성있음 (추천)
+*/
+//_to:받을사람
+contract lec24{
+  event howMuch(uint256 _value);
+
+  function sendNow(address payable _to) public payable {
+    bool sent = _to.send(msg.value);
+    require(sent, "Failed to send ether");
+    emit howMuch(msg.value);
+  }
+
+  function transferNow(address payable _to) public payable {
+    _to.transfer(msg.value);
+    emit howMuch(msg.value);
+  }
+
+  function callNow(address payable _to) public payable{
+    //~0.7
+    (bool sent, ) = _to.call.gas(1000).value(msg.value)("");
+    require(sent, "Failed to send ether");
+    //0.7~
+    (bool sent, ) = _to.call{value:msg.value, gas:1000}("");
+    require(sent, "Failed to send ether");
+    emit howMuch(msg.value);
+  }
+}
