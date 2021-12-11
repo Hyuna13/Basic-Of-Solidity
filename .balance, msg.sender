@@ -1,0 +1,28 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+pragma solidity >= 0.5.0 < 0.9.0;
+
+/*
+  주소.balance: 해당주소 이더잔액 (msg.value 송금액)
+  msg.sender: 스마트컨트랙트 주체
+*/
+
+contract MobileBanking{
+    
+    event SendInfo(address _msgSender, uint256 _currentValue);
+    event MyCurrentValue(address _msgSender, uint256 _value);
+    event CurrentValueOfSomeone(address _msgSender, address _to, uint256 _value);
+
+    function sendEther(address payable _to) public payable {
+        require(msg.sender.balance >= msg.value, "You balance is not enough");
+        _to.transfer(msg.value);
+        emit SendInfo(msg.sender, (msg.sender).balance); 
+    }
+
+    function checkValueNow() public {
+        emit MyCurrentValue(msg.sender, msg.sender.balance);
+    }
+
+    function checkUserMoney(address _to) public {
+        emit CurrentValueOfSomeone(msg.sender, _to, _to.balance);
+    }
+}
