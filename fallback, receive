@@ -1,0 +1,103 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+pragma solidity >= 0.5.0 < 0.9.0;
+
+/*
+  fallback: 대비책함수
+  1.무기명함수
+  2.external 함수
+  3.payable
+
+  스마트컨트랙이 이더를 받을수있게함
+  이더를 받고난후 어떠한 행동을 할수있게함
+  call함수로 없는함수가 불려질때 어떠한행동을 취할수있게함
+
+  //~0.6
+  function() external payable {
+  }
+
+  //0.6~ receive와 fallback으로 나뉨
+
+  receive: 오직 이더를받을때 작동
+  fallback: 함수를 실행하면서 이더를 보낼때 불려진함수가 없을때 작동
+
+
+  기본형: 특정 스마트컨트랙이 없을때 fallback 작동
+  fallback() external {
+  }
+
+  payable 적용시: 이더를 받은뒤 fallback 작동
+  fallback() external payable{
+  }
+ 
+  receive() external payable{
+  }
+*/
+
+contract Bank{
+  event JustFallbackWithFunds(address _from, uint256 _value, string message);
+  event ReceiveFallback(address _from, uint256 _value, string message);
+  event JustFallbackWithFunds(address _from, uint256 _value, string message);
+  //0.6~
+  function() external payable{
+    emit JustFallbackWithFunds(msg.sender, msg.value, "JustFallbackWithFunds is called");
+  }
+
+  //0.6~
+  fallback() external {
+    emit JustFallBack(msg.sender, "JustFallback is called");
+  }
+
+  receive() external payable {
+    emit ReceiveFallBack(msg.sender, msg.value, "ReceiveFallback is called");
+  }
+
+  /*function() external payable{
+    emit JustFallbackWithFunds(msg.sender, msg.value, "JustFallbackWithFunds is called");
+  }*/
+}
+
+contract You{
+  //receive()
+  function DepositWithSend(address payable _to) public payable {
+    bool success = _to.send(msg.value);
+    require(success, "Failed");
+  }
+
+  function DepositWithTransfer(address payable _to) public payable{
+    _to.transfer(msg.value);
+  }
+
+  function DepositwithCall(address payable _to) public payable{
+    //~0.7
+    (bool sent, ) = _to.call.value(msg.value)("");
+    require(sent, "Failed");
+
+    //0.7~
+    //(bool sent, ) = _to.call{value: msg.value};
+   // require(sent, "Failed to send ether");
+  }
+  
+  //fallback
+  function JustGiveMessage(address _to) public {
+    //~0.7
+    (bool sent, ) = _to.call("HI");
+    require(sent, "Failed to send ether");
+    //0.7~
+    //(bool success, ) = _to.call("HI");
+    //require(success, "Failed");
+  }
+
+  //to the fallback() with funds
+  function JustGiveMessageWithFunds(address payable _to) public payable{
+    //~0.7
+    (bool sent, ) = _to.call.value(msg.value)("HI");
+    require(sent, "Failed to send ether");
+    //0.7~
+    // (bool sent, ) = _to.call{value: msg.value}("HI");
+    //require(sent, "Failed");
+  }
+
+
+
+}
+
