@@ -1,0 +1,36 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+pragma solidity >= 0.5.0 < 0.9.0;
+
+/*
+Library:기존의 스마트컨트랙과 다른 종류의 스마트컨트랙
+이점
+1.재사용: 블록체인에 라이브러리가 배포되면 다른스마트컨트랙에 적용가능
+2.가스 소비 줄임: 재사용가능 gas비용 줄임
+3.데이터 타입 적용: 라이브러리의 기능들은 데이터타입에 적용가능
+
+제한
+1.fallback 함수 사용불가
+2.payable 정의 불가능
+3.상속불가
+*/
+
+//0.8~ overflow revert
+//overflow: 0~255 -> 256->0
+
+library SafeMath {
+    //0~255
+    function add(uint8 a, uint8 b) internal pure returns(uint8) {
+        require(a + b >= a, "SafeMath: addtion overflow");
+        return a + b;
+    }
+}
+
+contract lec32{
+    using SafeMath for uint8;
+    uint8 public a;
+
+    function becomeOverFlow(uint8 _num1, uint8 _num2) public {
+        //a = _num1.add(_num2);
+        a = SafeMath.add(_num1, _num2);
+    }
+}
