@@ -1,3 +1,4 @@
+
 // SPDX-License-Identifier: GPL-3.0-or-later
 pragma solidity >=0.6.0 <0.9.0;
 
@@ -43,6 +44,7 @@ contract Ballot {
         require(state == _state);
         _;
     }
+
     //Functions
     constructor(
         string memory _ballotOfficialName,
@@ -75,12 +77,15 @@ contract Ballot {
         state = State.Voting;
     }
 
-    function doVote(bool _choice) public inState(State.Voting) returns(bool voted)
+    function doVote(bool _choice) 
+        public 
+        inState(State.Voting) 
+        returns (bool voted)
     {
         bool found = false;
 
         if (bytes(voterRegister[msg.sender].voterName).length != 0 
-        && voterRegister[msg.sender].voted) {
+        && !voterRegister[msg.sender].voted) {
             voterRegister[msg.sender].voted = true;
             vote memory v;
             v.voterAddrses = msg.sender;
