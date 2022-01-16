@@ -1,5 +1,5 @@
-const serverUrl = "https://k8bygw1pnhy3.usemoralis.com:2053/server";
-const appId = "35EiTduCBBfVaD994Rp8bCRzVFPpEttWx5QlnXla";
+const serverUrl = "https://";
+const appId = "";
 Moralis.start({ serverUrl, appId });
 
 let hompage = "http://127.0.0.1:5500/index.html";
@@ -25,7 +25,7 @@ logout = async () => {
 
 getTransactions = async () => {
   console.log("get transactions clicked");
-  const options = { chain: "rinkeby", address: "0x6A2886022FA54cbe1B5cA9E1919ac11dD972C808"};
+  const options = { chain: "rinkeby", address: ""};
   const transactions = await Moralis.Web3API.account.getTransactions(options);
   console.log(transactions);
 
