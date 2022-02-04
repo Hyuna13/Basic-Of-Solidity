@@ -1,3 +1,4 @@
+
 //SPDX-License-Identifier: MIT
 pragma solidity >=0.5.0 <=0.8.11;
 
@@ -17,8 +18,8 @@ contract Lottery {
         _;
     }
 
-    function getWinnerByLottery() public view returns (address payable) {
-        return lotteryHistory[lotteryId];
+    function getWinnerByLottery(uint id) public view returns (address payable) {
+        return lotteryHistory[id];
     }
 
     function getBalance() public view returns (uint) {
