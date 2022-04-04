@@ -1,7 +1,7 @@
 //Send ether and Fetch transaction
 const { ethers } = require("ethers");
 
-const INFURA_ID = "1202069f51604d2290e3072860f24904"
+const INFURA_ID = ""
 const provider = new ethers.providers.JsonRpcProvider(`https://rinkeby.infura.io/v3/${INFURA_ID}`) //rinkeby 테스트넷 연결
 
 const account1 = "" //sender
