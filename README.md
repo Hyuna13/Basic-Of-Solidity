@@ -1,2 +1,2 @@
-# Basic-Of-Solidity
-Learning Solidity from inflearn, Youtube
+# Blockchain
+Learning Solidity & Blockchain & Ethereum
